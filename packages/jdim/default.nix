@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "jdim";
-  version = "0.14.0";
+  version = "0.15.0";
   buildInputs = [
     pkgs.mesa
     pkgs.gtkmm3
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "JDimproved";
     repo = "JDim";
-    rev = "11a0e8c648092d51308acb67bc86cc44cf9b0e20";
-    sha256 = "0n2i8pg71wb3a3hq91p4if1zs7f86wbjjakzp9615lylacwzjaip";
+    rev = "95c8d64c60e607aebb9097b9dd4b865670b1844c";
+    sha256 = "sha256-ztbSsKPN+UasuYa033pJRGhQCZTEsUSkpa27tdjG7tM=";
   };
 }
