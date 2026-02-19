@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # replace /var/local/edcb to $out/etc/edcb; edcb is hard-coding use /var/local/edcb.
-    find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's|/var/local/edcb|/etc/edcb|g' {} +
+    # find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's|/var/local/edcb|/etc/edcb|g' {} +
   '';
 
   preBuild = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.lua5_2}/lib -llua"
+    export NIX_LDFLAGS="-rpath $out/lib -rpath ${pkgs.lua52Packages.lua}/lib $NIX_LDFLAGS -L${pkgs.lua5_2}/lib -llua"
     
     # replace -llua5.2 in Makefile.
     find . -name Makefile -exec sed -i 's/-llua5.2/-llua/g' {} +
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/etc/edcb/HttpPublic
     cp -Rn ./ini/HttpPublic/index.html ./ini/HttpPublic/favicon.ico ./ini/HttpPublic/legacy $out/etc/edcb/HttpPublic/
     ${if epgTimerSrvIni != null
-      then "cp ${epgTimerSrvIni} $out/etc/edcb/HttpPublic/"
+      then "cp ${epgTimerSrvIni} $out/etc/edcb/"
       else "echo '[SET]' > $out/etc/edcb/EpgTimerSrv.ini; \
       	    echo 'EnableHttpSrv=2' > $out/etc/edcb/EpgTimerSrv.ini; \
 	          echo 'HttpAccessControlList=+127.0.0.1,+::1,+::ffff:127.0.0.1' >> $out/etc/edcb/EpgTimerSrv.ini"
@@ -86,8 +86,8 @@ stdenv.mkDerivation rec {
   '';
 
   posInstall = ''
-  wrapProgram $out/bin/EpgTimerSrv --prefix LD_LIBRARY_PATH : "$out/lib"
-  wrapProgram $out/bin/EpgDataCap_Bon --prefix LD_LIBRARY_PATH : "$out/lib"
+  wrapProgram $out/bin/EpgTimerSrv --prefix LD_LIBRARY_PATH : "$out/lib:${pkgs.lua52Packages.lua}/lib"
+  wrapProgram $out/bin/EpgDataCap_Bon --prefix LD_LIBRARY_PATH : "$out/lib:${pkgs.lua52Packages.lua}/lib"
   '';
 
   buildPhase = ''
