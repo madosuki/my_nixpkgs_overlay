@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VfhXRinvlN/n54NsqsNn/rhlohxY91zoV92nMi82AvU=";
   };
 
+  bonDriverLinuxMirakc = fetchFromGitHub {
+    owner = "matching";
+    repo = "BonDriver_LinuxMirakc";
+    rev = "cfbefc6d21dab4009db5f124984c1b720b76d869";
+    sha256 = "sha256-nEWCuA0BRY7qFNASV4jj0BKRpFXIyJzgI1ch1nyoSQ0=";
+    fetchSubmodules = true;
+  };
+
   postPatch = ''
     # replace /var/local/edcb to $out/etc/edcb; edcb is hard-coding use /var/local/edcb.
     # find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's|/var/local/edcb|/etc/edcb|g' {} +
@@ -49,7 +57,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/lib
     mkdir -p $out/lib/edcb
-    cd ../../
 
     # cp ./EpgDataCap3/EpgDataCap3/EpgDataCap3.so $out/lib/
     cp ./EpgDataCap3/EpgDataCap3/EpgDataCap3_Unicode.so $out/lib/libEpgDataCap3.so
@@ -59,6 +66,10 @@ stdenv.mkDerivation rec {
 
     cp ./EpgDataCap_Bon/EpgDataCap_Bon/EpgDataCap_Bon $out/bin/
     cp ./EpgTimerSrv/EpgTimerSrv/EpgTimerSrv $out/bin/
+
+    cp ./BonDriver_LinuxMirakc/BonDriver_LinuxMirakc.so $out/lib/edcb/
+    cp ./BonDriver_LinuxMirakc/BonDriver_LinuxMirakc.so.ini_sample $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
+    sed -i 's/^SERVER_TYPE="http"/SERVER_TYPE="unix"/' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
 
     # below process is place setting files but not working; because EDCB is require write permission setting dir.
     # therefore shoud manually place setting files refer to https://github.com/xtne6f/EDCB/blob/work-plus-s/Document/HowToBuild.txt
@@ -89,6 +100,15 @@ stdenv.mkDerivation rec {
     runHook preBuild
     cd Document/Unix
     make NOPCH=1 -j $NIX_BUILD_CORES
+
+    cd ../../
+
+    cp -r ${bonDriverLinuxMirakc} BonDriver_LinuxMirakc
+    chmod -R u+w ./BonDriver_LinuxMirakc
+    cd ./BonDriver_LinuxMirakc
+    make
+    cd ../
+
     runHook postBuild
   '';
 
