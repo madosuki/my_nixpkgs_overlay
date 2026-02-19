@@ -1,8 +1,9 @@
 { pkgs, stdenv, fetchFromGitHub
-, bitrateIni ? null
-, bonCtrlIni ? null
-, contentTypeText ? null
-, epgTimerSrvIni ? null }:
+# , bitrateIni ? null
+# , bonCtrlIni ? null
+# , contentTypeText ? null
+# , epgTimerSrvIni ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "edcb";
@@ -59,32 +60,22 @@ stdenv.mkDerivation rec {
     cp ./EpgDataCap_Bon/EpgDataCap_Bon/EpgDataCap_Bon $out/bin/
     cp ./EpgTimerSrv/EpgTimerSrv/EpgTimerSrv $out/bin/
 
+    # below process is place setting files but not working; because EDCB is require write permission setting dir.
+    # therefore shoud manually place setting files refer to https://github.com/xtne6f/EDCB/blob/work-plus-s/Document/HowToBuild.txt
     # install setting files
-    mkdir -p $out/etc/edcb
+    # mkdir -p $out/etc/edcb
 
-    ${if bitrateIni != null
-      then "cp ${bitrateIni} $out/etc/edcb/Bitrate.ini"
-      else "iconv -f CP932 -t UTF-8 ./ini/Bitrate.ini | tr -d '\r' > $out/etc/edcb/Bitrate.ini"
-     }
-    ${if bonCtrlIni != null
-      then "cp ${bonCtrlIni} $out/etc/edcb/BonCtrl.ini"
-      else "iconv -f CP932 -t UTF-8 ./ini/BonCtrl.ini | tr -d '\r' | sed 's/\.dll$$/.so/' > $out/etc/edcb/BonCtrl.ini"
-     }
+    # iconv -f CP932 -t UTF-8 ./ini/Bitrate.ini | tr -d '\r' > $out/etc/edcb/Bitrate.ini
+    # iconv -f CP932 -t UTF-8 ./ini/BonCtrl.ini | tr -d '\r' | sed 's/\.dll$$/.so/' > $out/etc/edcb/BonCtrl.ini
 
-    ${if contentTypeText != null
-      then "cp ${contentTypeText} $out/etc/edcb/ContentTypeText.txt"
-      else "tr -d '\r' < ./ini/ContentTypeText.txt > $out/etc/edcb/ContentTypeText.txt"
-     }
+    # tr -d '\r' < ./ini/ContentTypeText.txt > $out/etc/edcb/ContentTypeText.txt
 
 
-    mkdir -p $out/etc/edcb/HttpPublic
-    cp -Rn ./ini/HttpPublic/index.html ./ini/HttpPublic/favicon.ico ./ini/HttpPublic/legacy $out/etc/edcb/HttpPublic/
-    ${if epgTimerSrvIni != null
-      then "cp ${epgTimerSrvIni} $out/etc/edcb/"
-      else "echo '[SET]' > $out/etc/edcb/EpgTimerSrv.ini; \
-      	    echo 'EnableHttpSrv=2' > $out/etc/edcb/EpgTimerSrv.ini; \
-	          echo 'HttpAccessControlList=+127.0.0.1,+::1,+::ffff:127.0.0.1' >> $out/etc/edcb/EpgTimerSrv.ini"
-     }
+    # mkdir -p $out/etc/edcb/HttpPublic
+    # cp -Rn ./ini/HttpPublic/index.html ./ini/HttpPublic/favicon.ico ./ini/HttpPublic/legacy $out/etc/edcb/HttpPublic/
+    # echo '[SET]' > $out/etc/edcb/EpgTimerSrv.ini
+    # echo 'EnableHttpSrv=2' > $out/etc/edcb/EpgTimerSrv.ini
+    # echo 'HttpAccessControlList=+127.0.0.1,+::1,+::ffff:127.0.0.1' >> $out/etc/edcb/EpgTimerSrv.ini
 
     runHook postInstall
   '';
