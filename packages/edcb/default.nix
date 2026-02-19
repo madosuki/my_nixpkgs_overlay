@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # replace /var/local/edcb to $out/etc/edcb; edcb is hard-coding use /var/local/edcb.
     # find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's|/var/local/edcb|/etc/edcb|g' {} +
+
+    # replace hard coding lib path to out
+    sed -i 's|#define EDCB_LIB_ROOT L"/usr/local/lib/edcb"|#define EDCB_LIB_ROOT L"'${placeholder "out"}'/lib/edcb"|' Common/PathUtil.h
   '';
 
   preBuild = ''
@@ -44,6 +47,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     mkdir -p $out/lib
+    mkdir -p $out/lib/edcb
     cd ../../
 
     # cp ./EpgDataCap3/EpgDataCap3/EpgDataCap3.so $out/lib/
