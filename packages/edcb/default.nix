@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     pkgs.gcc
     pkgs.pkg-config
     pkgs.curl
+    pkgs.makeWrapper
   ];
   src = fetchFromGitHub {
     owner = "xtne6f";
@@ -25,7 +26,6 @@ stdenv.mkDerivation rec {
     rev = "d21fa8a8fa36c8366e366fcd200e01232a9a8d60";
     sha256 = "sha256-VfhXRinvlN/n54NsqsNn/rhlohxY91zoV92nMi82AvU=";
   };
-  # sourceRoot = "${src.name}/Document/Unix";
 
   postPatch = ''
     # replace /var/local/edcb to $out/etc/edcb; edcb is hard-coding use /var/local/edcb.
@@ -83,6 +83,11 @@ stdenv.mkDerivation rec {
      }
 
     runHook postInstall
+  '';
+
+  posInstall = ''
+  wrapProgram $out/bin/EpgTimerSrv --prefix LD_LIBRARY_PATH : "$out/lib"
+  wrapProgram $out/bin/EpgDataCap_Bon --prefix LD_LIBRARY_PATH : "$out/lib"
   '';
 
   buildPhase = ''
