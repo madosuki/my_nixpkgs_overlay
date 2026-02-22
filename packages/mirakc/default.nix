@@ -24,10 +24,16 @@ pkgs.rustPlatform.buildRustPackage rec {
   nativeBuildInputs = with pkgs; [
     curl
     rustPlatform.bindgenHook
+    git
   ];
 
   buildInputs = with pkgs; [
   ];
+  
+  postPatch = ''
+    substituteInPlace mirakc-core/src/config.rs \
+      --replace "/etc/mirakc/strings.yml" "/var/local/mirakc/config/strings.yml"
+  '';
 
   preBuild = ''
   cp ${swaggerUiZip} ./swagger-ui.zip

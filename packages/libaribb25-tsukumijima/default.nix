@@ -22,4 +22,12 @@ stdenv.mkDerivation {
     rev = "c30cbd1357f08129da59c2fcd01a0b1be50220c5";
     hash = "sha256-3lxHRAxGkXMIsc+mGMDk3g7Gl1kbAVWyHLmDGnRe8aw=";
   };
+
+  meta = with pkgs.lib; {
+    description = "libaribb25 tsukimijima version";
+    homepage = "https://github.com/tsukumijima/libaribb25";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+  };
+
 }

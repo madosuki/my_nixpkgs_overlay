@@ -26,4 +26,12 @@ stdenv.mkDerivation {
     rev = "95c8d64c60e607aebb9097b9dd4b865670b1844c";
     sha256 = "sha256-ztbSsKPN+UasuYa033pJRGhQCZTEsUSkpa27tdjG7tM=";
   };
+
+  meta = with pkgs.lib; {
+    description = "JDim";
+    homepage = "https://github.com/JDimproved/JDim";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+  };
+
 }
