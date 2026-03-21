@@ -37,9 +37,6 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    # replace /var/local/edcb to $out/etc/edcb; edcb is hard-coding use /var/local/edcb.
-    # find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's|/var/local/edcb|/etc/edcb|g' {} +
-
     # replace hard coding lib path to out
     sed -i 's|#define EDCB_LIB_ROOT L"/usr/local/lib/edcb"|#define EDCB_LIB_ROOT L"'${placeholder "out"}'/lib/edcb"|' Common/PathUtil.h
   '';
@@ -55,21 +52,22 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    mkdir -p $out/lib
     mkdir -p $out/lib/edcb
 
     # cp ./EpgDataCap3/EpgDataCap3/EpgDataCap3.so $out/lib/
-    cp ./EpgDataCap3/EpgDataCap3/EpgDataCap3_Unicode.so $out/lib/libEpgDataCap3.so
-    cp ./RecName_Macro/RecName_Macro/RecName_Macro.so $out/lib/
-    cp ./SendTSTCP/SendTSTCP/SendTSTCP.so $out/lib/
-    cp ./Write_Default/Write_Default/Write_Default.so $out/lib/
+    cp ./EpgDataCap3/EpgDataCap3/EpgDataCap3_Unicode.so $out/lib/edcb/EpgDataCap3.so
+    cp ./RecName_Macro/RecName_Macro/RecName_Macro.so $out/lib/edcb/
+    cp ./SendTSTCP/SendTSTCP/SendTSTCP.so $out/lib/edcb/
+    cp ./Write_Default/Write_Default/Write_Default.so $out/lib/edcb/
 
     cp ./EpgDataCap_Bon/EpgDataCap_Bon/EpgDataCap_Bon $out/bin/
     cp ./EpgTimerSrv/EpgTimerSrv/EpgTimerSrv $out/bin/
 
     cp ./BonDriver_LinuxMirakc/BonDriver_LinuxMirakc.so $out/lib/edcb/
     cp ./BonDriver_LinuxMirakc/BonDriver_LinuxMirakc.so.ini_sample $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
-    sed -i 's/^SERVER_TYPE="http"/SERVER_TYPE="unix"/' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
+    # sed -i 's|SERVER_SOCKPATH="/var/run/mirakc.sock"|SERVER_SOCKPATH="/var/local/run/mirakc.sock"|' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
+    # sed -i 's/^SERVER_TYPE="http"/SERVER_TYPE="unix"/' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
+    sed -i 's/^DECODE_B25=1/DECODE_B25=0/' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
 
     # below process is place setting files but not working; because EDCB is require write permission setting dir.
     # therefore shoud manually place setting files refer to https://github.com/xtne6f/EDCB/blob/work-plus-s/Document/HowToBuild.txt
