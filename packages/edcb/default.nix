@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     cp ./BonDriver_LinuxMirakc/BonDriver_LinuxMirakc.so.ini_sample $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
     # sed -i 's|SERVER_SOCKPATH="/var/run/mirakc.sock"|SERVER_SOCKPATH="/var/local/run/mirakc.sock"|' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
     # sed -i 's/^SERVER_TYPE="http"/SERVER_TYPE="unix"/' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
-    sed -i 's/^DECODE_B25=1/DECODE_B25=0/' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
+    # sed -i 's/^DECODE_B25=1/DECODE_B25=0/' $out/lib/edcb/BonDriver_LinuxMirakc.so.ini
 
     # below process is place setting files but not working; because EDCB is require write permission setting dir.
     # therefore shoud manually place setting files refer to https://github.com/xtne6f/EDCB/blob/work-plus-s/Document/HowToBuild.txt
