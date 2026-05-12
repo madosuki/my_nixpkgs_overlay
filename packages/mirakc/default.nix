@@ -2,7 +2,7 @@
 
 pkgs.rustPlatform.buildRustPackage rec {
   pname = "mirakc";
-  version = "3.4.56";
+  version = "3.4.67";
 
   swaggerUiZip = pkgs.fetchurl {
     url = " https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.14.zip";
@@ -12,9 +12,9 @@ pkgs.rustPlatform.buildRustPackage rec {
   src = pkgs.fetchFromGitHub {
     owner = "mirakc";
     repo = "mirakc";
-    rev = "3b64a2ef73736ed291c406127f4e0d0bcf3c87a1"; 
+    rev = "669e96bcbc942743e3780a7a2ce12a9386478632";
     fetchSubmodules = true;
-    sha256 = "sha256-JpGEm0Hsy3FRapa/rcDVIzfaEBmBNyRaBt0Bmt6V9IU=";
+    sha256 = "sha256-HuuM8GeBEMau/sBa74OlufsNraHfQiJUXxMobrGkJDw=";
   };
 
   cargoLock = {
