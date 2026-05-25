@@ -6,4 +6,5 @@ self: super: {
   mirakc = super.callPackage ./packages/mirakc/default.nix {};
   mirakc-arib = super.callPackage ./packages/mirakc-arib/default.nix {};
   roswell-overlay = super.callPackage ./packages/roswell-overlay/default.nix {};
+  microsandbox = super.callPackage ./packages/microsandbox/default.nix {};
 }
