@@ -9,16 +9,16 @@
 let
   precompiled_binary = {
     "x86_64-linux" = {
-      url = "https://github.com/superradcompany/microsandbox/releases/download/v0.4.6/microsandbox-linux-x86_64.tar.gz";
-      hash = "sha256-gCb8yykJBNJ8Y0v19hhdOPu+UVyUEoHkZ2fQ93Jvbac=";
+      url = "https://github.com/superradcompany/microsandbox/releases/download/v0.5.7/microsandbox-linux-x86_64.tar.gz";
+      hash = "sha256-qOir/lvdOoHIWuXyaOzbwW/pbv1sdzJDUa2nN2YyT+Q=";
     };
     "aarch64-linux" = {
-      url = "https://github.com/superradcompany/microsandbox/releases/download/v0.4.6/microsandbox-linux-aarch64.tar.gz";
-      hash = "sha256-5LFHqCfSlbGJVPMJQkjaNLSdf+8neguahElpUkHNRtM=";
+      url = "https://github.com/superradcompany/microsandbox/releases/download/v0.5.7/microsandbox-linux-aarch64.tar.gz";
+      hash = "sha256-VHOPFn3PW3wxxUGX4RldD0kbtJJwE71D2slXBdcbBKQ=;B";
     };
     "aarch64-darwin" = {
-      url = "https://github.com/superradcompany/microsandbox/releases/download/v0.4.6/microsandbox-darwin-aarch64.tar.gz";
-      hash = "sha256-RmfFsU93f79q4sWw16FkLG1zbMbpufWBv+N7/gJd0d4=";
+      url = "https://github.com/superradcompany/microsandbox/releases/download/v0.5.7/microsandbox-darwin-aarch64.tar.gz";
+      hash = "sha256-13k15/T0Whwrml4/6sC106SF5rlwKhJz/y4AKNFvP1s=";
     };
   };
 
@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "microsandbox";
-  version = "v0.4.6";
+  version = "v0.5.7";
 
   sourceRoot = ".";
   src = fetchurl precompiled_binary.${stdenv.hostPlatform.system};
